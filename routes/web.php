@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Catalog\ForRentController;
+use App\Http\Controllers\Catalog\ForSellController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +16,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', [LoginController::class, 'index']);
+// login view
+Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/', [LoginController::class, 'store']);
+// register view
 Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/for-sell',[ForSellController::class, 'index']);
+    Route::post('/for-rent',[ForRentController::class, 'index']);
+    Route::post('/logout', [LoginController::class, 'logout']);
+});

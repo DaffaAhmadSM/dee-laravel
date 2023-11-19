@@ -20,7 +20,7 @@
                 </div>
             @endif
             @if (session()->has('error'))
-                <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
+                <div class="flex items-center p-4 mb-4 text-sm text-white border border-red-300 rounded-lg bg-red-500" role="alert">
                     <span class="sr-only">Info</span>
                     <div>
                         {{ session('error') }}

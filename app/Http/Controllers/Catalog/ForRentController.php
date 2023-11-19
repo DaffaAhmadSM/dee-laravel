@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Catalog;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class ForRentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('login');
+        //
     }
 
     /**
@@ -29,17 +28,7 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = $request->validate([
-            'email' => 'required|email:dns',
-            'password' => 'required|min:8',
-        ]);
-        if ($validator) {
-            if (Auth::attempt($request->only('email', 'password'))) {
-                return redirect('/for-sell');
-            } else {
-                return back()->with('error', 'Invalid login credentials');
-            }
-        }
+        //
     }
 
     /**
