@@ -16,15 +16,17 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::redirect('/', '/for-sell');
+
 // login view
-Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::post('/', [LoginController::class, 'store']);
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'store']);
 // register view
 Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/for-sell',[ForSellController::class, 'index']);
-    Route::post('/for-rent',[ForRentController::class, 'index']);
+    Route::get('/for-rent',[ForRentController::class, 'index']);
     Route::post('/logout', [LoginController::class, 'logout']);
 });

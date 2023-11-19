@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
+use App\Models\ItemList;
 use Illuminate\Http\Request;
 
 class ForSellController extends Controller
@@ -12,7 +13,10 @@ class ForSellController extends Controller
      */
     public function index()
     {
+        $list_item_sell = ItemList::where('Type', 'Sell')->get();
+
         return view('catalog.listing',[
+            'lists' => $list_item_sell,
             'title' => 'Item For Sell',
             'description' => 'For Sell',
             'active' => 'for-sell'

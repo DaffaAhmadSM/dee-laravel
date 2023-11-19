@@ -14,27 +14,25 @@
         List {{$title}}:
       </div>
       <div class="grid grid-cols-4 justify-evenly justify-items-center">
-      
-          @for ($i = 0; $i < 10; $i++)
-      
+          @foreach ($lists as $list)
           <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-72 rounded-xl bg-clip-border mt-7">
               <a href="url" class="block overflow-hidden">
               <div class="relative overflow-hidden text-gray-700 bg-white h-72 rounded-xl bg-clip-border">
                 <img
-                  src="https://images.unsplash.com/photo-1629367494173-c78a56567877?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=927&amp;q=80"
+                  src="{{asset("storage/".$list->image)}}"
                   class="object-cover w-full h-full"
                 />
               </div>
               <div class="p-6">
                 <div class="flex flex-col items-start justify-between mb-2">
                   <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-                    Apple AirPods
+                    {{$list->name}}
                   </p>
                   <p class="font-light text-xs pt-4">
-                      start from
+                      Price:
                   </p>
                   <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-                    Rp. 95.00
+                    Rp. {{number_format($list->price, 0, ',', '.')}}
                   </p>
                 </div>
               </div>
@@ -48,7 +46,7 @@
                 </button>
               </div>
             </div>
-          @endfor
+            @endforeach
       
       
       </div>

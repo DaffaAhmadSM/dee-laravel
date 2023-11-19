@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
+use App\Models\ItemList;
 use Illuminate\Http\Request;
 
 class ForRentController extends Controller
@@ -12,7 +13,14 @@ class ForRentController extends Controller
      */
     public function index()
     {
-        //
+        $list_item_rent = ItemList::where('Type', 'Rent')->get();
+
+        return view('catalog.listing',[
+            'lists' => $list_item_rent,
+            'title' => 'Item For Rent',
+            'description' => 'For Rent',
+            'active' => 'for-rent'
+        ]);
     }
 
     /**
