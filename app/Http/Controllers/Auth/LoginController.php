@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -28,7 +29,17 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->validate([
+            'email' => 'required|email:dns',
+            'password' => 'required|min:8',
+        ]);
+        if ($validator) {
+            if (Auth::attempt($request->only('email', 'password'))) {
+                return redirect('/dashboard');
+            } else {
+                return back()->with('error', 'Invalid login details');
+            }
+        }
     }
 
     /**
