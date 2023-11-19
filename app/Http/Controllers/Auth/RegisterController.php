@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -28,7 +31,21 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->validate([
+            'name' => 'required|min:5',
+            'email' => 'required|email:dns|max:255|unique:users,email',
+            'password' => 'required|min:8',
+        ]);
+
+        if ($validator) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                // Hash the password before saving it to the database
+                'password' => Hash::make($request->password),
+        ]);
+            return redirect('/')->with('success', 'Account created successfully!');
+        }
     }
 
     /**
