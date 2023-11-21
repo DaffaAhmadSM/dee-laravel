@@ -15,7 +15,7 @@ class ForRentController extends Controller
     {
         $list_item_rent = ItemList::where('Type', 'Rent')->get();
 
-        return view('catalog.listing',[
+        return view('catalog.for-rent',[
             'lists' => $list_item_rent,
             'title' => 'Item For Rent',
             'description' => 'For Rent',

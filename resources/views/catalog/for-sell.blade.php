@@ -16,7 +16,7 @@
       <div class="grid grid-cols-4 justify-evenly justify-items-center">
           @foreach ($lists as $list)
           <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-72 rounded-xl bg-clip-border mt-7">
-              <a href="url" class="block overflow-hidden">
+              <a href="item-detail/{{$list->slug}}" class="block overflow-hidden">
               <div class="relative overflow-hidden text-gray-700 bg-white h-72 rounded-xl bg-clip-border">
                 <img
                   src="{{asset("storage/".$list->image)}}"

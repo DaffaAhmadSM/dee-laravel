@@ -15,7 +15,7 @@ class ForSellController extends Controller
     {
         $list_item_sell = ItemList::where('Type', 'Sell')->get();
 
-        return view('catalog.listing',[
+        return view('catalog.for-sell',[
             'lists' => $list_item_sell,
             'title' => 'Item For Sell',
             'description' => 'For Sell',
