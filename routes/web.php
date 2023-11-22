@@ -5,6 +5,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\Catalog\ForRentController;
 use App\Http\Controllers\Catalog\ForSellController;
 
@@ -37,4 +38,28 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/post/{id}', [ReviewController::class, 'store']);
         Route::post('/reply/item/{item_id}/id/{id}', [ReviewController::class, 'reply']);
     });
+
+    // add to cart
+    Route::prefix('/add-to-cart')->group(function () {
+        // view
+        Route::get('/cart-sell/{ItemList:id}', [CartController::class, 'cartSell']);
+        Route::get('/cart-rent/{ItemList:id}', [CartController::class, 'cartRent']);
+        Route::get('/cart-reserve/{ItemList:id}', [CartController::class, 'cartReserve']);
+        // post
+        Route::post('/cart-sell/{id}', [CartController::class, 'cartSellPost']);
+        Route::post('/cart-reserve/{id}', [CartController::class, 'cartReservePost']);
+        Route::post('/cart-rent/{id}', [CartController::class, 'cartRentPost']);
+    });
+
+
+    Route::prefix('/delete-cart')->group(function () {
+        Route::post('/cart/{id}', [CartController::class, 'cartDelete']);
+        Route::post('/cart-reserve/{id}', [CartController::class, 'cartReserve']);
+    });
+
+    Route::prefix('/cart')->group(function () {
+        Route::get('/cart-sell-rent', [CartController::class, 'cartSellRentView']);
+        Route::get('/cart-reserve', [CartController::class, 'cartReserve']);
+    });
+    
 });

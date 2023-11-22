@@ -8,7 +8,6 @@
 </head>
 <body>
     @include('components.navbar')
-    
     <div class="m-12">
       <div class="text-5xl mb-4">
         List {{$title}}:
@@ -25,25 +24,38 @@
               </div>
               <div class="p-6">
                 <div class="flex flex-col items-start justify-between mb-2">
-                  <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                  <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900 overflow-hidden whitespace-nowrap" style="text-overflow: ellipsis">
                     {{$list->name}}
                   </p>
-                  <p class="font-light text-xs pt-4">
-                      Price:
-                  </p>
-                  <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-                    Rp. {{number_format($list->price, 0, ',', '.')}}
-                  </p>
+                  <div class="flex-row flex pt-4">
+                    <div class="pr-2 mr-2  border-r-2 border-gray-500 flex justify-center flex-col items-center">
+                      <p class="">
+                        Stock:
+                      </p>
+                      <p>
+                        {{$list->stock}}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="font-light text-xs">
+                          Price:
+                      </p>
+                      <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                        Rp. {{number_format($list->price, 0, ',', '.')}}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
               </a>
               <div class="p-3 pt-0">
-                <button
+                <a
+                  href="/add-to-cart/cart-sell/{{$list->id}}"
                   class="block w-full select-none rounded-lg bg-blue-gray-900/10 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-blue-gray-900 transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   type="button"
                 >
                   Add to Cart
-                </button>
+                </a>
               </div>
             </div>
             @endforeach

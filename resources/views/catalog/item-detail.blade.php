@@ -27,11 +27,21 @@
               </p>
               <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
               </div>
+              @if ($item->type == "Sell")
               <div class="flex">
                 <span class="title-font font-medium text-2xl text-gray-900">Rp. {{number_format($item->price, 0, ',', '.')}}</span>
-                <button class="flex ml-auto text-black bg-[#F3AF01] border-0 py-2 px-6 focus:outline-none hover:bg-yellow-400 rounded">Add To Cart</button>
-                </button>
+                <a href="/add-to-cart/cart-sell/{{$item->id}}" class="flex ml-auto text-black bg-[#F3AF01] border-0 py-2 px-6 focus:outline-none hover:bg-yellow-400 rounded">Add To Cart</a>
               </div>
+              @endif
+              @if ($item->type == "Rent")
+              <div class="flex">
+                <span class="title-font font-medium text-2xl text-gray-900">Rp. {{number_format($item->price, 0, ',', '.')}}</span>
+                <div class="flex ml-auto space-x-4">
+                  <a href="/add-to-cart/cart-rent/{{$item->id}}" class=" text-black bg-[#F3AF01] border-0 py-2 px-6 focus:outline-none hover:bg-yellow-400 rounded">Rent Item</a>
+                  <a href="/add-to-cart/cart-reserve/{{$item->id}}" class=" text-black bg-[#F3AF01] border-0 py-2 px-6 focus:outline-none hover:bg-yellow-400 rounded">Reserve Item</a>
+                </div>
+              </div>
+              @endif
             </div>
           </div>
         </div>
