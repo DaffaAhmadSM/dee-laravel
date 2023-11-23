@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Catalog\ForRentController;
 use App\Http\Controllers\Catalog\ForSellController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,5 +62,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/cart-sell-rent', [CartController::class, 'cartSellRentView']);
         Route::get('/cart-reserve', [CartController::class, 'cartReserve']);
     });
+
+    Route::prefix('/checkout')->group(function () {
+        Route::post('/{id}', [CheckoutController::class, 'index']);
+        Route::post('/cart/store', [CheckoutController::class, 'store']);
+    });
+    Route::get('/payment-method/{id}/', [CheckoutController::class, 'paymentMethod']);
     
 });

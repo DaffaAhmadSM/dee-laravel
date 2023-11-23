@@ -109,8 +109,8 @@ class CartController extends Controller
     }
 
     public function cartSellRentView(){
-        $user_cart_sell = Cart::where('user_id', auth()->user()->id)->where('type', "Sell")->with('item')->get();
-        $user_cart_rent = Cart::where('user_id', auth()->user()->id)->where('type', "Rent-dp")->with('item')->get();
+        $user_cart_sell = Cart::where('user_id', auth()->user()->id)->where('type', "Sell")->where('status', 'pending')->with('item')->get();
+        $user_cart_rent = Cart::where('user_id', auth()->user()->id)->where('type', "Rent-dp")->where('status', 'pending')->with('item')->get();
         return view('cart.cart-view',[
             'title' => 'Cart',
             'active' => 'cart',

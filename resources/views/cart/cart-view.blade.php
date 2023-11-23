@@ -57,17 +57,17 @@
                                 <td class="p-2">
                                     <div class="flex space-x-6 justify-center items-center">
                                         @if ($cart->item->stock < $cart->quantity)
-                                        <form action="/purchase/{{$cart->id}}" method="POST" class="bg-red-600 text-white" disabled>
+                                        <form class="bg-red-600 text-white" disabled>
                                             @csrf
                                             <button type="submit" class="p-4" disabled>
                                                 Out of Stock
                                             </button>
                                         </form>
                                         @else
-                                        <form action="/purchase/{{$cart->id}}" method="POST" class="bg-yellow-400">
+                                        <form action="/payment-method/{{$cart->id}}" class="bg-yellow-400">
                                             @csrf
                                             <button type="submit" class="p-4">
-                                                Purchase
+                                                Checkout
                                             </button>
                                         </form>
                                         @endif
@@ -147,10 +147,10 @@
                                             </button>
                                         </form>
                                         @else
-                                        <form action="/purchase/{{$cart->id}}" method="POST" class="bg-yellow-400">
+                                        <form action="/payment-method/{{$cart->id}}" class="bg-yellow-400">
                                             @csrf
                                             <button type="submit" class="p-4">
-                                                Purchase
+                                                Checkout
                                             </button>
                                         </form>
                                         @endif

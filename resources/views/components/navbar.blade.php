@@ -1,4 +1,6 @@
 <!-- navbar goes here -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 <nav class="bg-[#F3AF01]">
   <div class="max-w-[100rem] mx-auto px-4">
     <div class="flex justify-between font-semibold">
@@ -38,4 +40,3 @@
             </div>
         </div>
     @endif
-  <script src="https://cdn.tailwindcss.com"></script>
