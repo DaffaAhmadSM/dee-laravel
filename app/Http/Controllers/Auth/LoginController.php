@@ -35,6 +35,9 @@ class LoginController extends Controller
         ]);
         if ($validator) {
             if (Auth::attempt($request->only('email', 'password'))) {
+                if (Auth::user()->hasRole('admin')) {
+                    return redirect('/admin/order');
+                }
                 return redirect('/for-sell');
             } else {
                 return back()->with('error', 'Invalid login credentials');
@@ -69,8 +72,9 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
-        //
+        Auth::logout();
+        return redirect('/login');
     }
 }

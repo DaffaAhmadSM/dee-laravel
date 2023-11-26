@@ -51,8 +51,12 @@ class CheckoutController extends Controller
             DB::beginTransaction();
             $pay = ItemPurchase::create($request->except(['_token']));
             Cart::find($request->cart_id)->update(['status' => 'paid']);
+            // update current stock
+            $item = ItemList::find($request->item_list_id);
+            $item->update(['stock' => $item->stock - $request->quantity]);
             DB::commit();
         } catch (\Throwable $th) {
+            DB::rollback();
             return redirect('/for-sell')->with('error', 'Checkout Failed');
         }
         return redirect('/for-sell')->with('success', 'Checkout Success');

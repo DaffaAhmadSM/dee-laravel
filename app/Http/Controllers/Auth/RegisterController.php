@@ -44,7 +44,7 @@ class RegisterController extends Controller
                 // Hash the password before saving it to the database
                 'password' => Hash::make($request->password),
         ]);
-            return redirect('/')->with('success', 'Account created successfully!');
+            return redirect('/login')->with('success', 'Account created successfully!');
         }
     }
 

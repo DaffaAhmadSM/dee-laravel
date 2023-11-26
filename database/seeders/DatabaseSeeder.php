@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,5 +30,13 @@ class DatabaseSeeder extends Seeder
         ];
 
         Category::insert($category_list);
+        Role::create(['name' => 'admin']);
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make("admin123"),
+        ]);
+
+        $admin->assignRole('admin');
     }
 }

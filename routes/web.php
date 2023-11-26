@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReviewController;
@@ -30,6 +31,7 @@ Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/logout', [LoginController::class, 'destroy']);
     Route::get('/for-sell',[ForSellController::class, 'index']);
     Route::get('/for-rent',[ForRentController::class, 'index']);
     Route::get('/item-detail/{ItemList:slug}', [ItemController::class, 'index']);
@@ -68,5 +70,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/cart/store', [CheckoutController::class, 'store']);
     });
     Route::get('/payment-method/{id}/', [CheckoutController::class, 'paymentMethod']);
+
+    Route::group(['prefix'=>'/admin', 'middleware'=>['role:admin']], function () {
+        Route::get('/order', [AdminController::class, 'order']);
+        Route::post('/order/confirm/{id}', [AdminController::class, 'orderConfirmPost']);
+        Route::get('/rent', [AdminController::class, 'rent']);
+        Route::post('/rent/confirm/{id}', [AdminController::class, 'rentConfirmPost']);
+        Route::get('/rent-reserve-half-paid', [AdminController::class, 'rentReserveHalfPaid']);
+        Route::get('/pickup', [AdminController::class, 'pickup']);
+        Route::post('/pickup/confirm/{id}', [AdminController::class, 'pickupConfirmPost']);
+    });
     
 });
