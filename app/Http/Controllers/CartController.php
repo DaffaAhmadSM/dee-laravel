@@ -52,7 +52,7 @@ class CartController extends Controller
         
 
 
-        return redirect('/for-sell')->with('success', 'Item added to cart');
+        return redirect('/cart/cart-sell-rent')->with('success', 'Item added to cart');
     }
 
     public function cartReservePost(Request $request, $id){

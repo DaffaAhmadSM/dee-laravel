@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\Catalog\ForRentController;
 use App\Http\Controllers\Catalog\ForSellController;
-use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,16 +70,41 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/{id}', [CheckoutController::class, 'index']);
         Route::post('/cart/store', [CheckoutController::class, 'store']);
     });
-    Route::get('/payment-method/{id}/', [CheckoutController::class, 'paymentMethod']);
+    Route::get('/payment-method/{id}', [CheckoutController::class, 'paymentMethod']);
 
     Route::group(['prefix'=>'/admin', 'middleware'=>['role:admin']], function () {
+        // confirm order
         Route::get('/order', [AdminController::class, 'order']);
         Route::post('/order/confirm/{id}', [AdminController::class, 'orderConfirmPost']);
+        // confirm rent
         Route::get('/rent', [AdminController::class, 'rent']);
         Route::post('/rent/confirm/{id}', [AdminController::class, 'rentConfirmPost']);
+        // half paid list
         Route::get('/rent-reserve-half-paid', [AdminController::class, 'rentReserveHalfPaid']);
+        // pickup
         Route::get('/pickup', [AdminController::class, 'pickup']);
         Route::post('/pickup/confirm/{id}', [AdminController::class, 'pickupConfirmPost']);
+        Route::post('/pickup/arrival/{id}', [AdminController::class, 'pickupArrivalPost']);
+    });
+
+    Route::group(['prefix'=>'/user'], function () {
+        Route::get('/profile', [UserController::class, 'index']);
+        // edit profile
+        Route::get('/edit', [UserController::class, 'edit']);
+        Route::post('/edit', [UserController::class, 'editPost']);
+        // view
+        Route::get('/order', [UserController::class, 'order']);
+        Route::get('/rent', [UserController::class, 'rent']);
+        Route::get('/rent-reserve-half-paid', [UserController::class, 'rentReserveHalfPaid']);
+        Route::get('/pickup', [UserController::class, 'pickup']);
+        // pay half payment
+        Route::get('/payment-method/{id}', [UserController::class, 'paymentMethod']);
+        Route::post('/pay/half/{id}', [UserController::class, 'payHalf']);
+        Route::post('/pay/store', [UserController::class, 'payHalfPost']);
+        // confirm order arrival
+        Route::post('/order/confirm/{id}', [UserController::class, 'orderConfirmPost']);
+        // confirm rent arrival
+        Route::post('/rent/confirm/{id}', [UserController::class, 'rentConfirmPost']);
     });
     
 });

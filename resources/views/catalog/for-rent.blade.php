@@ -27,12 +27,24 @@
                   <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
                     {{$list->name}}
                   </p>
-                  <p class="font-light text-xs pt-4">
-                      Start from:
-                  </p>
-                  <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-                    Rp. {{number_format($list->price, 0, ',', '.')}}/Day
-                  </p>
+                  <div class="flex-row flex pt-4">
+                    <div class="pr-2 mr-2  border-r-2 border-gray-500 flex justify-center flex-col items-center">
+                      <p class="">
+                        Stock:
+                      </p>
+                      <p>
+                        {{$list->stock}}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="font-light text-xs">
+                          Price:
+                      </p>
+                      <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                        Rp. {{number_format($list->price, 0, ',', '.')}}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
               </a>

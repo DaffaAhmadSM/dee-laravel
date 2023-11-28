@@ -118,4 +118,14 @@ class AdminController extends Controller
             return redirect('/admin/pickup?status=pickup')->with('error', 'Something went wrong');
         }
     }
+
+    public function pickupArrivalPost($id){
+        try{
+            $item = ItemPurchase::find($id);
+            $item->update(['status' => 'completed']);
+            return redirect('/admin/pickup?status=on-pickup')->with('success', 'Pickup status Confirmed product is on pickup');
+        }catch(\Exception $e){
+            return redirect('/admin/pickup?status=pickup')->with('error', 'Something went wrong');
+        }
+    }
 }

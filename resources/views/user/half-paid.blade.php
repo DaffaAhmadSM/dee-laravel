@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('layouts.admin')
+@extends('layouts.profile')
 
 @section('content')
 <div class="overflow-y-auto w-full">
@@ -26,6 +26,7 @@
                             <th class="font-normal text-left pl-4">Quantity</th>
                             <th class="font-normal text-left pl-4">Price</th>
                             <th class="font-normal text-left pl-4">Down Payment (50%)</th>
+                            <th class="font-normal text-left pl-4">Action</th>
                         </tr>
                     <tbody>
                         @foreach ($items as $item)                            
@@ -66,6 +67,12 @@
                             <td class="pl-4">
                                 <button class="py-3 px-6 focus:outline-none text-sm leading-none text-gray-700 bg-gray-100 rounded">Rp. {{number_format($item->cartDetail->down_payment)}}</button>
                             </td>
+                            <form action="/user/payment-method/{{$item->id}}">
+                                @csrf
+                                <td class="pl-4">
+                                    <button class="focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm leading-none hover:text-gray-600 text-white py-3 px-5 bg-blue-500 rounded hover:bg-gray-200 focus:outline-none">Pay</button>
+                                </td>
+                            </form>
                         </tr>
                         @endforeach
                     </tbody>
