@@ -10,13 +10,13 @@
         <div class="flex items-center space-x-8 justify-evenly">
           <a href="/for-sell" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "for-sell") ? 'bg-yellow-400' : ''}}">For Sell</a>
           <a href="/for-rent" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "for-rent") ? 'bg-yellow-400' : ''}}">For Rent</a>
-          <a href="suggestion" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "suggestion") ? 'bg-yellow-400' : ''}}">Suggestion</a>
+          <a href="/suggestion" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "suggestion") ? 'bg-yellow-400' : ''}}">Suggestion</a>
         </div>
       </div>
 
       <!-- secondary nav -->
       <div class="flex items-center space-x-1">
-        <a href="/reservation" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "reservation") ? 'bg-yellow-400' : ''}}">Reservation</a>
+        <a href="/cart/cart-reserve" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "reservation") ? 'bg-yellow-400' : ''}}">Reservation</a>
         <a href="/cart/cart-sell-rent" class="py-5 px-3 text-gray-700 hover:text-gray-900 {{($active == "cart") ? 'bg-yellow-400' : ''}}">Cart</a>
         <a href="/user/profile" class="py-5 px-3 text-gray-700 hover:text-gray-900">
           <svg width="25" height="25" viewBox="0 0 77 77" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,5 +45,13 @@
             <div>
                 {{ session('error') }}
             </div>
+        </div>
+    @endif
+    @if (session()->has('warning'))
+        <div class="flex items-center p-4 mb-4 text-sm text-white border border-red-300 rounded-lg bg-red-500 justify-between" role="alert">
+            <div>
+                {{ session('warning') }}
+            </div>
+            <a href="/user/rent-reserve-half-paid" class="focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-yellow-300 rounded hover:bg-gray-200 focus:outline-none">Detail</a>
         </div>
     @endif

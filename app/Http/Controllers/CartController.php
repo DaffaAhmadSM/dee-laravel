@@ -59,9 +59,9 @@ class CartController extends Controller
         $validator = $request->validate([
             'quantity' => 'required|numeric|min:1',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date'
+            'end_date' => 'required|date|after:start_date',
+            'total_price' => 'required|numeric|min:1'
         ]);
-
         try {
             Cart::create([
                 'item_list_id' => $id,
@@ -69,16 +69,17 @@ class CartController extends Controller
                 'quantity' => $request->quantity,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'type' => 'Reserve'
+                'total_price' => $request->total_price,
+                'down_payment' => $request->total_price / 2,
+                'type' => 'Reserve-dp'
             ]);
         } catch (\Throwable $th) {
-            return redirect('/for-sell')->with('error', 'add to cart failed');
+            return redirect('/for-rent')->with('error', 'add to cart failed');
         }
         
 
 
-        return redirect('/for-sell')->with('success', 'Item added to cart');
-
+        return redirect('/for-rent')->with('success', 'Item added to cart');
     }
 
     public function cartRentPost(Request $request, $id){
@@ -116,6 +117,14 @@ class CartController extends Controller
             'active' => 'cart',
             'user_carts_sell' => $user_cart_sell,
             'user_carts_rent' => $user_cart_rent
+        ]);
+    }
+    public function cartReserveView(){
+        $user_cart_reserve = Cart::where('user_id', auth()->user()->id)->where('type', "Reserve-dp")->where('status', 'pending')->with('item')->get();
+        return view('cart.cart-reserve-view',[
+            'title' => 'Cart',
+            'active' => 'cart',
+            'user_carts_reserve' => $user_cart_reserve,
         ]);
     }
 

@@ -70,9 +70,32 @@ class UserController extends Controller
             'items' => $items->get()
         ]);
     }
+    public function reservation (Request $request){
+        if(!$request->status){
+            $request['status'] = 'pending';
+        }
+        $items = ItemPurchase::where('type', 'Reserve-dp')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        if($request->status == 'pending'){
+            $items->where('status', 'pending');
+        }
+        if($request->status == 'delivery'){
+            $items->where('status', 'delivery');
+        }
+        if($request->status == 'on-rent'){
+            $items->where('status', 'on-rent');
+        }
+        if($request->status == 'completed'){
+            $items->where('status', 'completed');
+        }
+        return view('user.reserve', [
+            'title' => 'User Rent',
+            'active' => $request->status,
+            'items' => $items->get()
+        ]);
+    }
 
     public function rentReserveHalfPaid(Request $request){
-        $items = ItemPurchase::where('payment_status', 'half-paid')->where([['status', "!=", 'pending'], ['status', "!=", 'on-pickup']])->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        $items = ItemPurchase::where('payment_status', 'half-paid')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
         return view('user.half-paid', [
             'title' => 'Order Confirm',
             'active' => 'rent-reserve-half-paid',
@@ -172,6 +195,17 @@ class UserController extends Controller
             return redirect('/user/rent?status=on-rent')->with('success', 'Arrival status confirmed successfully');
         } catch (\Throwable $th) {
             return redirect('/user/rent')->with('error', 'failed to confirm');
+        }
+    }
+
+    public function reservationConfirmPost(Request $request, $id){
+        try {
+            ItemPurchase::find($id)->update([
+                'status' => 'on-rent'
+            ]);
+            return redirect('/user/reservation?status=on-rent')->with('success', 'Arrival status confirmed successfully');
+        } catch (\Throwable $th) {
+            return redirect('/user/reservation')->with('error', 'failed to confirm');
         }
     }
 }

@@ -53,6 +53,31 @@ class AdminController extends Controller
         ]);
     }
 
+    public function reservation (Request $request){
+        if(!$request->status){
+            $request['status'] = 'pending';
+        }
+        $items = ItemPurchase::where('type', 'Reserve-dp')->with('itemDetail')->with('userDetail')->with('cartDetail');
+        if($request->status == 'pending'){
+            $items->where('status', 'pending');
+        }
+        if($request->status == 'delivery'){
+            $items->where('status', 'delivery');
+        }
+        if($request->status == 'on-rent'){
+            $items->where('status', 'on-rent');
+        }
+        if($request->status == 'completed'){
+            $items->where('status', 'completed');
+        }
+        // dd($items->get());
+        return view('admin.reserve', [
+            'title' => 'Order Confirm',
+            'active' => $request->status,
+            'items' => $items->get()
+        ]);
+    }
+
     public function pickup(Request $request){
         $date_now = date('Y-m-d');
         if(!$request->status){
@@ -80,7 +105,7 @@ class AdminController extends Controller
     }
 
     public function rentReserveHalfPaid(Request $request){
-        $items = ItemPurchase::where('payment_status', 'half-paid')->where([['status', "!=", 'pending'], ['status', "!=", 'on-pickup']])->with('itemDetail')->with('userDetail')->with('cartDetail');
+        $items = ItemPurchase::where('payment_status', 'half-paid')->with('itemDetail')->with('userDetail')->with('cartDetail');
         return view('admin.half-paid', [
             'title' => 'Order Confirm',
             'active' => 'rent-reserve-half-paid',
@@ -106,6 +131,16 @@ class AdminController extends Controller
             return redirect('/admin/rent?status=delivery')->with('success', 'Rent status Confirmed product is on delivery');
         }catch(\Exception $e){
             return redirect('/admin/rent?status=pending')->with('error', 'Something went wrong');
+        }
+    }
+
+    public function reservationConfirmPost($id){
+        try{
+            $item = ItemPurchase::find($id);
+            $item->update(['status' => 'delivery']);
+            return redirect('/admin/reservation?status=delivery')->with('success', 'reservation status Confirmed product is on delivery');
+        }catch(\Exception $e){
+            return redirect('/admin/reservation?status=pending')->with('error', 'Something went wrong');
         }
     }
 

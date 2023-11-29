@@ -25,7 +25,7 @@
           <a href="/admin/rent" class="flex translate-x-12 hover:text-black mt-3">
             <p>Rent</p>
           </a>
-          <a href="/admin/" class="flex translate-x-12 hover:text-black mt-3">
+          <a href="/admin/reservation" class="flex translate-x-12 hover:text-black mt-3">
             <p>Reservation</p>
           </a>
           <a href="/admin/rent-reserve-half-paid" class="flex translate-x-12 hover:text-black mt-3">

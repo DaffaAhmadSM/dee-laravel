@@ -24,7 +24,7 @@
                     </div>
                 </div>
             @endif
-            @if ($cart->type == 'Rent-dp') 
+            @if ($cart->type == 'Rent-dp' || $cart->type == 'Reserve-dp') 
                 <div>
                     <div>
                         Down Payment:

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Catalog\ForRentController;
 use App\Http\Controllers\Catalog\ForSellController;
+use App\Http\Controllers\SuggestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('/cart')->group(function () {
         Route::get('/cart-sell-rent', [CartController::class, 'cartSellRentView']);
-        Route::get('/cart-reserve', [CartController::class, 'cartReserve']);
+        Route::get('/cart-reserve', [CartController::class, 'cartReserveView']);
     });
 
     Route::prefix('/checkout')->group(function () {
@@ -79,6 +80,9 @@ Route::group(['middleware' => ['auth']], function () {
         // confirm rent
         Route::get('/rent', [AdminController::class, 'rent']);
         Route::post('/rent/confirm/{id}', [AdminController::class, 'rentConfirmPost']);
+        // reserve
+        Route::get('/reservation', [AdminController::class, 'reservation']);
+        Route::post('/reserve/confirm/{id}', [AdminController::class, 'reservationConfirmPost']);
         // half paid list
         Route::get('/rent-reserve-half-paid', [AdminController::class, 'rentReserveHalfPaid']);
         // pickup
@@ -95,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         // view
         Route::get('/order', [UserController::class, 'order']);
         Route::get('/rent', [UserController::class, 'rent']);
+        Route::get('/reservation', [UserController::class, 'reservation']);
         Route::get('/rent-reserve-half-paid', [UserController::class, 'rentReserveHalfPaid']);
         Route::get('/pickup', [UserController::class, 'pickup']);
         // pay half payment
@@ -105,6 +110,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/order/confirm/{id}', [UserController::class, 'orderConfirmPost']);
         // confirm rent arrival
         Route::post('/rent/confirm/{id}', [UserController::class, 'rentConfirmPost']);
+        // confirm reservation arrival
+        Route::post('/reserve/confirm/{id}', [UserController::class, 'reservationConfirmPost']);
+    });
+
+    Route::group(['prefix'=>'/suggestion'], function () {
+        Route::get('/', [SuggestController::class, 'index']);
+        Route::post('/store', [SuggestController::class, 'store']);
+        Route::post('/like/{id}', [SuggestController::class, 'like']);
+        Route::post('/dislike/{id}', [SuggestController::class, 'dislike']);
+        Route::post('/unlike/{id}', [SuggestController::class, 'unlike']);
+        Route::post('/undislike/{id}', [SuggestController::class, 'undislike']);
     });
     
 });
