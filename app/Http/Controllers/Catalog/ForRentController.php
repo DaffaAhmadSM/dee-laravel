@@ -17,7 +17,9 @@ class ForRentController extends Controller
     {
         $list_item_rent = ItemList::where('Type', 'Rent')->get();
         $item_half_paid = ItemPurchase::where('payment_status', 'half-paid')->where('user_id', auth()->user()->id)->sum('total_price');
+        if($item_half_paid > 0){
         Session::flash('warning', 'You have to pay the rest of your payment, your total payment is Rp. '.number_format($item_half_paid/2, 0, ',', '.') );
+        }
         return view('catalog.for-rent',[
             'lists' => $list_item_rent,
             'title' => 'Item For Rent',

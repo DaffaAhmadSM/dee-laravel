@@ -169,6 +169,9 @@ class AdminController extends Controller
         try{
             $item = Renewal::find($id);
             $item->update(['status' => 'renewed']);
+
+            $cart = Cart::find($item->cart_id);
+            $cart->update(['end_date' => $item->renewal_date]);
             return redirect('/admin/renewal?status=renewed')->with('success', 'Renewal status Confirmed product is on delivery');
         }catch(\Exception $e){
             return redirect('/admin/renewal?status=pending')->with('error', 'Something went wrong');
