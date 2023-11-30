@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ItemPurchase;
+use App\Models\Renewal;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -96,11 +98,73 @@ class UserController extends Controller
 
     public function rentReserveHalfPaid(Request $request){
         $items = ItemPurchase::where('payment_status', 'half-paid')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        $renewal = Renewal::where('status', 'renewed')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail')->with('itemPurchaseDetail');
         return view('user.half-paid', [
             'title' => 'Order Confirm',
             'active' => 'rent-reserve-half-paid',
+            'items' => $items->get(),
+            'renewal' => $renewal->get()
+        ]);
+    }
+
+    public function renewal(Request $request){
+        if(!$request->status){
+            $request['status'] = 'on-rent';
+            $items = ItemPurchase::where('status', 'on-rent')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        }
+        if($request->status == 'on-rent'){
+            $items = ItemPurchase::where('status', 'on-rent')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        }
+        if($request->status == 'pending'){
+            $items = Renewal::where('status', 'pending')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        }
+        if($request->status == 'renewed'){
+            $items = Renewal::where('status', 'renewed')->where('user_id', auth()->user()->id)->with('itemDetail')->with('userDetail')->with('cartDetail');
+        }
+        return view('user.renewal', [
+            'title' => 'Renewal',
+            'active' => $request->status,
             'items' => $items->get()
         ]);
+    }
+
+    public function renewalConfirm($id){
+        $item = ItemPurchase::with('itemDetail')->with('userDetail')->with('cartDetail')->find($id);
+        return view('user.renewal-confirm', [
+            'title' => 'Renewal Confirm',
+            'active' => 'renewal',
+            'user' => auth()->user(),
+            'item' => $item
+        ]);
+    }
+
+    public function renewalConfirmPost(Request $request, $id){
+        $validator = $request->validate([
+            'renewal_date' => 'required'
+        ]);
+        $item = ItemPurchase::with('cartDetail')->with('itemDetail')->find($id);
+        $end = Carbon::parse($item->cartDetail->end_date);
+        $renewal_date = Carbon::parse($request->renewal_date);
+
+        $diff = $end->diffInDays($renewal_date);
+
+        $total_price = $item->itemDetail->price * $diff;
+        try {
+            Renewal::create([
+                'user_id' => auth()->user()->id,
+                'item_list_id' => $item->itemDetail->id,
+                'item_purchase_id' => $item->id,
+                'cart_id' => $item->cart_id,
+                'renewal_date' => $request->renewal_date,
+                'price_total' => $total_price,
+                'down_payment' => $total_price/2,
+                'status' => 'pending'
+            ]);
+            return redirect('/user/renewal?status=pending')->with('success', 'Renewal requested successfully');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect('/user/renewal')->with('error', 'failed to request renewal');
+        }
     }
 
     public function paymentMethod($id){

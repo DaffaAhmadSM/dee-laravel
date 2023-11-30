@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\ItemPurchase;
+use App\Models\Renewal;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -78,6 +80,25 @@ class AdminController extends Controller
         ]);
     }
 
+    public function renewal (Request $request){
+        if(!$request->status){
+            $request['status'] = 'pending';
+        }
+        $items = Renewal::with('cartDetail')->with('userDetail')->with('itemDetail');
+        if($request->status == 'pending'){
+            $items->where('status', 'pending');
+        }
+        if($request->status == 'renewed'){
+            $items->where('status', 'renewed');
+        }
+       
+        return view('admin.renewal', [
+            'title' => 'Order Confirm',
+            'active' => $request->status,
+            'items' => $items->get()
+        ]);
+    }
+
     public function pickup(Request $request){
         $date_now = date('Y-m-d');
         if(!$request->status){
@@ -141,6 +162,16 @@ class AdminController extends Controller
             return redirect('/admin/reservation?status=delivery')->with('success', 'reservation status Confirmed product is on delivery');
         }catch(\Exception $e){
             return redirect('/admin/reservation?status=pending')->with('error', 'Something went wrong');
+        }
+    }
+
+    public function renewalConfirmPost($id){
+        try{
+            $item = Renewal::find($id);
+            $item->update(['status' => 'renewed']);
+            return redirect('/admin/renewal?status=renewed')->with('success', 'Renewal status Confirmed product is on delivery');
+        }catch(\Exception $e){
+            return redirect('/admin/renewal?status=pending')->with('error', 'Something went wrong');
         }
     }
 

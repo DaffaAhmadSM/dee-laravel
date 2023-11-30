@@ -85,6 +85,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/reserve/confirm/{id}', [AdminController::class, 'reservationConfirmPost']);
         // half paid list
         Route::get('/rent-reserve-half-paid', [AdminController::class, 'rentReserveHalfPaid']);
+        // renewal
+        Route::get('/renewal', [AdminController::class, 'renewal']);
+        Route::post('/renewal/confirm/{id}', [AdminController::class, 'renewalConfirmPost']);
         // pickup
         Route::get('/pickup', [AdminController::class, 'pickup']);
         Route::post('/pickup/confirm/{id}', [AdminController::class, 'pickupConfirmPost']);
@@ -102,6 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/reservation', [UserController::class, 'reservation']);
         Route::get('/rent-reserve-half-paid', [UserController::class, 'rentReserveHalfPaid']);
         Route::get('/pickup', [UserController::class, 'pickup']);
+        Route::get('/renewal', [UserController::class, 'renewal']);
         // pay half payment
         Route::get('/payment-method/{id}', [UserController::class, 'paymentMethod']);
         Route::post('/pay/half/{id}', [UserController::class, 'payHalf']);
@@ -112,6 +116,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/rent/confirm/{id}', [UserController::class, 'rentConfirmPost']);
         // confirm reservation arrival
         Route::post('/reserve/confirm/{id}', [UserController::class, 'reservationConfirmPost']);
+        // confirm request renewal
+        Route::get('/renewal/{id}', [UserController::class, 'renewalConfirm']);
+        Route::post('/renewal/request/{id}', [UserController::class, 'renewalConfirmPost']);
     });
 
     Route::group(['prefix'=>'/suggestion'], function () {
