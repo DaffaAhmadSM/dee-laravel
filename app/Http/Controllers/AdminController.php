@@ -127,10 +127,12 @@ class AdminController extends Controller
 
     public function rentReserveHalfPaid(Request $request){
         $items = ItemPurchase::where('payment_status', 'half-paid')->with('itemDetail')->with('userDetail')->with('cartDetail');
+        $renewal = Renewal::where('status', 'renewed')->with('itemDetail')->with('userDetail')->with('cartDetail')->with('itemPurchaseDetail');
         return view('admin.half-paid', [
             'title' => 'Order Confirm',
             'active' => 'rent-reserve-half-paid',
-            'items' => $items->get()
+            'items' => $items->get(),
+            'renewal' => $renewal->get()
         ]);
     }
 
