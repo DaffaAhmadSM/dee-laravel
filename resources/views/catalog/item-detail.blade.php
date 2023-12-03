@@ -47,26 +47,35 @@
         </div>
       </section>
 
-      
+      @if ($bool)
+        <section class="flex mx-auto items-center justify-center shadow-lg" id="review">
+          <form class="w-full bg-white rounded-lg px-4 pt-2" action="/review/post/{{$item->id}}" method="POST">
+            @csrf
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <h2 class="px-4 pt-3 pb-2 text-gray-800 text-lg">Review</h2>
+                <div class="w-full md:w-full px-3 mb-2 mt-2">
+                  <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="review" placeholder='Type Your Review' required></textarea>
+                </div>
+                <div class="w-full md:w-full flex items-start px-3">
+                  <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+                  </div>
+                  <div class="-mr-1">
+                      <input type='submit' class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" value='Post Review'>
+                  </div>
+                </div>
+              </div>
+            </form>
+      </section>
+      @else
+        <section class="flex mx-auto items-center justify-center shadow-lg" id="review">
+          <div class="flex flex-col p-5">
+            <h2 class="px-4 pt-3 pb-2 text-gray-800 text-lg text-center">Review</h2>
+            <h3 class="px-4 pt-3 pb-2 text-gray-800 text-lg">You need to purchase this item to review it</h3>
+          </div>
+      </section>
+      @endif
     {{-- review Input --}}
-      <section class="flex mx-auto items-center justify-center shadow-lg" id="review">
-        <form class="w-full bg-white rounded-lg px-4 pt-2" action="/review/post/{{$item->id}}" method="POST">
-          @csrf
-           <div class="flex flex-wrap -mx-3 mb-6">
-              <h2 class="px-4 pt-3 pb-2 text-gray-800 text-lg">Review</h2>
-              <div class="w-full md:w-full px-3 mb-2 mt-2">
-                 <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="review" placeholder='Type Your Review' required></textarea>
-              </div>
-              <div class="w-full md:w-full flex items-start px-3">
-                 <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
-                 </div>
-                 <div class="-mr-1">
-                    <input type='submit' class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" value='Post Review'>
-                 </div>
-              </div>
-            </div>
-          </form>
-     </section>
+      
 
     @foreach ($reviews as $review)
      <div class="flex justify-center items-center">
@@ -79,26 +88,31 @@
                    <div class="mt-6 flex justify-start items-center flex-row space-x-2.5">
                            <p class="text-base font-medium leading-none text-gray-800 ">{{$review->user->name}}</p>
                            <p class="text-sm leading-none text-gray-600 ">{{Carbon::parse($review->created_at)->format('d M Y')}}</p>
+                           @if ($bool)
                            <button @click="open = ! open">Reply</button>
+                           @endif
                    </div>
+                   @if ($bool)
                    <section class="flex shadow-lg" id="review" x-show="open">
-                     <form class="w-full bg-white rounded-lg px-4 pt-2" action="/review/reply/item/{{$item->id}}/id/{{$review->id}}" method="POST">
-                       @csrf
-                       <div class="flex flex-wrap -mx-3 mb-6">
-                           <div class="w-full md:w-full px-3 mb-2 mt-2">
-                             <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="review" placeholder='replying to {{$review->user->name}}' required></textarea>
-                           </div>
-                           <div class="w-full md:w-full flex items-start px-3">
-                             <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
-                             </div>
-                             <div class="-mr-1">
-                                 <input type='submit' class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" value='Send'>
-                             </div>
-                           </div>
-                         </div>
-                       </form>
-                     </section>
-                  </div>
+                    <form class="w-full bg-white rounded-lg px-4 pt-2" action="/review/reply/item/{{$item->id}}/id/{{$review->id}}" method="POST">
+                      @csrf
+                      <div class="flex flex-wrap -mx-3 mb-6">
+                          <div class="w-full md:w-full px-3 mb-2 mt-2">
+                            <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="review" placeholder='replying to {{$review->user->name}}' required></textarea>
+                          </div>
+                          <div class="w-full md:w-full flex items-start px-3">
+                            <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+                            </div>
+                            <div class="-mr-1">
+                                <input type='submit' class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" value='Send'>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </section>
+                 </div>
+                   @endif
+                   
                @if($review->reply != null)
                @foreach ($review->reply as $reply)
                  <div class="w-full flex justify-start items-start flex-col bg-gray-50 md:px-8 py-8 relative">
