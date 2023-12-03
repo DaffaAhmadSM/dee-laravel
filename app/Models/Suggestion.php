@@ -22,4 +22,8 @@ class Suggestion extends Model
         return $this->hasOne(SuggestionDislike::class);
     }
 
+    public function replies(){
+        return $this->hasMany(Suggestion::class, 'reply_id');
+    }
+
 }

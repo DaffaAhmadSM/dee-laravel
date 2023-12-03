@@ -42,8 +42,7 @@
          <section class="relative flex justify-center h-screen antialiased bg-white00 w-full">
             @foreach ($suggestions as $suggest)
             <div class="container">
-                <div
-                    class="flex-col w-full py-4 mx-auto bg-white border-b-2 border-r-2 border-gray-200">
+                <div class="flex-col w-full py-4 mx-auto bg-white border-b-2 border-r-2 border-gray-200" x-data="{ open: false }">
                     <div class="flex flex-row">
                         <div class="flex-col mt-1">
                             <div class="flex items-center flex-1 px-4 font-bold leading-tight">{{ $suggest->user->name }}
@@ -107,9 +106,43 @@
                                 {{$suggest->suggestion_dislike_count}}
                             </form>
                             @endif
+                            <div class="inline-flex ml-10">
+                                <button @click="open = ! open">Reply</button>
+                            </div>
+                            <section class="flex shadow-lg" id="review" x-show="open">
+                                <form class="w-full bg-white rounded-lg px-4 pt-2" action="/suggestion/reply/{{$suggest->id}}" method="POST">
+                                  @csrf
+                                  <div class="flex flex-wrap -mx-3 mb-6">
+                                      <div class="w-full md:w-full px-3 mb-2 mt-2">
+                                        <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="reply" placeholder='replying to {{ $suggest->user->name }}' required></textarea>
+                                      </div>
+                                      <div class="w-full md:w-full flex items-start px-3">
+                                        <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+                                        </div>
+                                        <div class="-mr-1">
+                                            <input type='submit' class="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" value='Send'>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </section>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                @foreach ($suggest->replies as $reply)
+                <div class="flex flex-row ml-10 mt-4">
+                    <div class="flex-col mt-1">
+                        <div class="flex items-center flex-1 px-4 font-bold leading-tight">{{ $reply->user->name }}
+                        </div>
+                        <div class="flex-1 px-2 ml-2 text-lg font-medium leading-loose text-gray-600">
+                            {{ $reply->suggest }}
                         </div>
                     </div>
-            </div>
+                </div>
+                @endforeach
+                    
             @endforeach
         </section>
         

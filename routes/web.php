@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix'=>'/suggestion'], function () {
         Route::get('/', [SuggestController::class, 'index']);
+        Route::post('/reply/{id}', [SuggestController::class, 'reply']);
         Route::post('/store', [SuggestController::class, 'store']);
         Route::post('/like/{id}', [SuggestController::class, 'like']);
         Route::post('/dislike/{id}', [SuggestController::class, 'dislike']);

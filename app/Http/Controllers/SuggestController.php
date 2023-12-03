@@ -15,7 +15,7 @@ class SuggestController extends Controller
             $query->where('user_id', auth()->user()->id);
         }])->withCount('suggestionLike')->with(['suggestionDislike' => function($query){
             $query->where('user_id', auth()->user()->id);
-        }])->withCount('suggestionDislike')->get();
+        }])->withCount('suggestionDislike')->with('replies.user')->where('reply_id', null)->orderBy('created_at', 'desc')->get();
         // return json_encode($suggest);
         return view('suggest',[
             'active' => 'suggestion',
@@ -108,6 +108,21 @@ class SuggestController extends Controller
         }
 
         return redirect('/suggestion')->with('success', 'undislike berhasil');
+    }
+
+    public function reply(Request $request, $id)
+    {
+        $this->validate($request, [
+            'reply' => 'required'
+        ]);
+
+        $suggest = Suggestion::create([
+            'suggest' => $request->reply,
+            'user_id' => auth()->user()->id,
+            'reply_id' => $id
+        ]);
+
+        return redirect('/suggestion')->with('success', 'Terima kasih atas saran anda');
     }
 
 
